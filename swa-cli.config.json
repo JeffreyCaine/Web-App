@@ -1,8 +1,10 @@
 {
 	"configurations": {
 		"app": {
-			"context": "./build/static",
-			"apiLocation": "./api"
+			"context": "http://localhost:3000",
+			"apiLocation": "./api",
+			"run": "npm run dev",
+			"open": true
 		}
 	}
 }
