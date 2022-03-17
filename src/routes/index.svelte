@@ -1,2 +1,5 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<h1>Welcome to the Acton Health app development</h1>
+<p>
+	This is under active construction and is intended for testing and
+	development purposes.
+</p>
