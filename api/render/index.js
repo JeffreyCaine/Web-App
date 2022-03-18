@@ -5537,8 +5537,8 @@ var entry, js, css;
 var init__ = __esm({
   ".svelte-kit/output/server/nodes/0.js"() {
     init_layout_svelte();
-    entry = "layout.svelte-f1e7deed.js";
-    js = ["layout.svelte-f1e7deed.js", "chunks/vendor-18182ef8.js"];
+    entry = "layout.svelte-593c03c9.js";
+    js = ["layout.svelte-593c03c9.js", "chunks/vendor-8331c6e1.js"];
     css = [];
   }
 });
@@ -5587,8 +5587,8 @@ var entry2, js2, css2;
 var init__2 = __esm({
   ".svelte-kit/output/server/nodes/1.js"() {
     init_error_svelte();
-    entry2 = "error.svelte-af3bcdf2.js";
-    js2 = ["error.svelte-af3bcdf2.js", "chunks/vendor-18182ef8.js"];
+    entry2 = "error.svelte-e6be490a.js";
+    js2 = ["error.svelte-e6be490a.js", "chunks/vendor-8331c6e1.js"];
     css2 = [];
   }
 });
@@ -5766,7 +5766,7 @@ async function render_endpoint(event, mod) {
     return error(`${preface}: expected an object, got ${typeof response}`);
   }
   if (response.fallthrough) {
-    throw new Error("fallthrough is no longer supported. Use validators instead: https://kit.svelte.dev/docs/routing#advanced-routing-validation");
+    throw new Error("fallthrough is no longer supported. Use matchers instead: https://kit.svelte.dev/docs/routing#advanced-routing-matching");
   }
   const { status = 200, body = {} } = response;
   const headers = response.headers instanceof Headers ? new Headers(response.headers) : to_headers(response.headers);
@@ -6888,7 +6888,7 @@ async function load_node({
       throw new Error(`load function must return a value${options.dev ? ` (${node.entry})` : ""}`);
     }
     if (loaded.fallthrough) {
-      throw new Error("fallthrough is no longer supported. Use validators instead: https://kit.svelte.dev/docs/routing#advanced-routing-validation");
+      throw new Error("fallthrough is no longer supported. Use matchers instead: https://kit.svelte.dev/docs/routing#advanced-routing-matching");
     }
   } else if (shadow.body) {
     loaded = {
@@ -6940,7 +6940,7 @@ async function load_shadow_data(route, event, options, prerender) {
     if (!is_get) {
       const result = await handler(event);
       if (result.fallthrough) {
-        throw new Error("fallthrough is no longer supported. Use validators instead: https://kit.svelte.dev/docs/routing#advanced-routing-validation");
+        throw new Error("fallthrough is no longer supported. Use matchers instead: https://kit.svelte.dev/docs/routing#advanced-routing-matching");
       }
       const { status, headers, body } = validate_shadow_output(result);
       data.status = status;
@@ -6955,7 +6955,7 @@ async function load_shadow_data(route, event, options, prerender) {
     if (get) {
       const result = await get(event);
       if (result.fallthrough) {
-        throw new Error("fallthrough is no longer supported. Use validators instead: https://kit.svelte.dev/docs/routing#advanced-routing-validation");
+        throw new Error("fallthrough is no longer supported. Use matchers instead: https://kit.svelte.dev/docs/routing#advanced-routing-matching");
       }
       const { status, headers, body } = validate_shadow_output(result);
       add_cookies(data.cookies, headers);
@@ -7285,17 +7285,17 @@ function negotiate(accept, types2) {
   }
   return accepted;
 }
-function exec(match, names, types2, validators) {
+function exec(match, names, types2, matchers) {
   const params = {};
   for (let i2 = 0; i2 < names.length; i2 += 1) {
     const name = names[i2];
     const type = types2[i2];
     const value = match[i2 + 1] || "";
     if (type) {
-      const validator = validators[type];
-      if (!validator)
-        throw new Error(`Missing "${type}" param validator`);
-      if (!validator(value))
+      const matcher = matchers[type];
+      if (!matcher)
+        throw new Error(`Missing "${type}" param matcher`);
+      if (!matcher(value))
         return;
     }
     params[name] = value;
@@ -7305,7 +7305,7 @@ function exec(match, names, types2, validators) {
 var DATA_SUFFIX = "/__data.json";
 var default_transform = ({ html }) => html;
 async function respond(request, options, state) {
-  var _a4, _b;
+  var _a4, _b, _c;
   let url = new URL(request.url);
   const normalized = normalize_path(url.pathname, options.trailing_slash);
   if (normalized !== url.pathname && !((_a4 = state.prerender) == null ? void 0 : _a4.fallback)) {
@@ -7342,7 +7342,7 @@ async function respond(request, options, state) {
   let decoded = decodeURI(url.pathname);
   let route = null;
   let params = {};
-  if (options.paths.base) {
+  if (options.paths.base && !((_c = state.prerender) == null ? void 0 : _c.fallback)) {
     if (!decoded.startsWith(options.paths.base)) {
       return new Response(void 0, { status: 404 });
     }
@@ -7355,12 +7355,12 @@ async function respond(request, options, state) {
     url = new URL(url.origin + normalized2 + url.search);
   }
   if (!state.prerender || !state.prerender.fallback) {
-    const validators = await options.manifest._.validators();
+    const matchers = await options.manifest._.matchers();
     for (const candidate of options.manifest._.routes) {
       const match = candidate.pattern.exec(decoded);
       if (!match)
         continue;
-      const matched = exec(match, candidate.names, candidate.types, validators);
+      const matched = exec(match, candidate.names, candidate.types, matchers);
       if (matched) {
         route = candidate;
         params = decode_params(matched);
@@ -7597,13 +7597,13 @@ var manifest = {
   assets: new Set(["favicon.png"]),
   mimeTypes: { ".png": "image/png" },
   _: {
-    entry: { "file": "start-72006f43.js", "js": ["start-72006f43.js", "chunks/vendor-18182ef8.js"], "css": [] },
+    entry: { "file": "start-0488a96e.js", "js": ["start-0488a96e.js", "chunks/vendor-8331c6e1.js"], "css": [] },
     nodes: [
       () => Promise.resolve().then(() => (init__(), __exports)),
       () => Promise.resolve().then(() => (init__2(), __exports2))
     ],
     routes: [],
-    validators: async () => {
+    matchers: async () => {
       return {};
     }
   }
